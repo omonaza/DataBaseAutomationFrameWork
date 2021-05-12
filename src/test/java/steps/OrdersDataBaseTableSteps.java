@@ -1,5 +1,6 @@
 package steps;
 
+import beans.FoodDeliveryApi1;
 import beans.Orders;
 import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
@@ -27,6 +28,8 @@ public class OrdersDataBaseTableSteps {
 
     private String query;
     private List<Map<String, Object>> dbResultSet;
+    private List<Map<String, Object>> databaseResult;
+
 
     @Given("^remove all records from orders table$")
     public void remove_all_records_from_orders_table() throws Throwable {
@@ -94,18 +97,18 @@ public class OrdersDataBaseTableSteps {
     @And("^remove all orders placed after \"([^\"]*)\"$")
     public void removeAllOrdersPlacedAfter(String time) throws Throwable {
         DataBaseUtils.executeQuery(DISABLE_FOREIGNKEY_CHECKS_QUERY);
-        query = "SELECT * from orders WHERE order_placed_at > "+time+";";
-        List<Orders> ordersListFromDataBase = DataBaseUtils.executeQueryToBean(Orders.class,query);
-        Assert.assertFalse("List is not empty failure " ,ordersListFromDataBase.isEmpty());
-        for(Orders o : ordersListFromDataBase){
-            query = "delete from orders where id = '"+o.getId()+"';";
+        query = "SELECT * from orders WHERE order_placed_at > " + time + ";";
+        List<Orders> ordersListFromDataBase = DataBaseUtils.executeQueryToBean(Orders.class, query);
+        Assert.assertFalse("List is not empty failure ", ordersListFromDataBase.isEmpty());
+        for (Orders o : ordersListFromDataBase) {
+            query = "delete from orders where id = '" + o.getId() + "';";
             DataBaseUtils.executeQuery(query);
-            System.out.println("this is id from data base----> "+o.getId());
+            System.out.println("this is id from data base----> " + o.getId());
         }
 
 
-
     }
+
 
     @Then("^verify that new data has been deleted from order_status$")
     public void verifyThatNewDataHasBeenDeletedFromOrder_status(List<Orders> ordersList) throws SQLException {
@@ -120,4 +123,7 @@ public class OrdersDataBaseTableSteps {
 
 
     }
+
+
+
 }

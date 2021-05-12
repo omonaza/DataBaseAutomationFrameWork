@@ -79,23 +79,23 @@ public class Food implements Comparable< Food > {
         return this.getId().compareTo(o.getId());
     }
 
-     @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Food food = (Food) o;
-            return id.equals(food.id) &&
-                    description.equals(food.description)
-                    && food_type.equals(food.food_type)
-                    && image_url.equals(food.image_url)
-                    && name.equals(food.name)
-                    && price.equals(food.price);
-        }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Food food = (Food) o;
+        return id.equals(food.id) &&
+                description.equals(food.description)
+                && food_type.equals(food.food_type)
+                && image_url.equals(food.image_url)
+                && name.equals(food.name)
+                && price.equals(food.price);
+    }
 
-        @Override
-        public int hashCode() {
-            return id;
-        }
+    @Override
+    public int hashCode() {
+        return id;
+    }
 
     //To see the data in Error messages
     @Override

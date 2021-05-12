@@ -1,61 +1,83 @@
 Feature: Food functionality
 
-  Scenario: User adds food / happy path
+  @addingFood
+  Scenario: User adds food happy path
     Given add new food to FoodDelivery with the following fields
       | description | imageUrl        | price | name   | foodType  |
-      | Wine        | https:foods.com | 20.00 | Merlot | Beverages |
-    Then verify that status code is 200
+      | Wine123     | https:foods.com | 20.00 | Merlot | Beverages |
+    Then Verify that status code is 200
     Then verify that food has been successfully added
+      | description | imageUrl        | price | name   | foodType  |
+      | Wine123     | https:foods.com | 20.00 | Merlot | Beverages |
 
-  Scenario: user adds food without image url
+  @addingWithoutUrl
+  Scenario: adding food without image url
     Given add new food to FoodDelivery without image url
       | description | price | name   | foodType  |
       | Wine        | 20.00 | Merlot | Beverages |
-    Then verify that status code is 403
-    Then verify response error message "Invalid request - Food image url cannot be null or empty."
+    Then Verify that status code is 403
+    Then verify response error message
+      | status           | errorMessage                                              |
+      | Bad Request Body | Invalid request - Food image url cannot be null or empty. |
 
-
+  @addingWithOutPrice
+  @bug
   Scenario: user adds food without price
     Given add new food to FoodDelivery without price
       | description | imageUrl        | name   | foodType  |
       | Wine        | https:foods.com | Merlot | Beverages |
-    Then verify that status code is 403
-    Then verify response error message "Invalid request - Food price cannot be null or empty."
+    Then Verify that status code is 403
+    Then verify response error message
+      | status           | errorMessage                                          |
+      | Bad Request Body | Invalid request - Food price cannot be null or empty. |
 
+  @addingWithOutANAme
   Scenario: user adds food without a name
     Given add new food to FoodDelivery without name
       | description | imageUrl        | price | foodType  |
       | Wine        | https:foods.com | 20.00 | Beverages |
-    Then verify that status code is 403
-    Then verify response error message "Invalid request - Food name cannot be null or empty."
+    Then Verify that status code is 403
+    Then verify response error message
+      | status           | errorMessage                                         |
+      | Bad Request Body | Invalid request - Food name cannot be null or empty. |
 
+  @addingWithAnEmptyName
   Scenario: user adds food with an empty  name
     Given add new food to FoodDelivery with an empty name
-      | description | imageUrl        | price | foodType  |
-      | Wine        | https:foods.com | 20.00 | Beverages |
-    Then verify that status code is 403
-    Then verify response error message "Invalid request - Food name cannot be null or empty."
+      | description | imageUrl        | price | name | foodType  |
+      | Wine123     | https:foods.com | 20.00 |      | Beverages |
+    Then Verify that status code is 403
+    Then verify response error message
+      | status           | errorMessage                                         |
+      | Bad Request Body | Invalid request - Food name cannot be null or empty. |
 
+  @addingNameWithNull
   Scenario: user adds food with a  null name
     Given add new food to FoodDelivery with null name
-      | description | imageUrl        | price | foodType  |
-      | Wine        | https:foods.com | 20.00 | Beverages |
-    Then verify that status code is 403
-    Then verify response error message "Invalid request - Food name cannot be null or empty."
+      | description | imageUrl        | price | name | foodType  |
+      | Wine123     | https:foods.com | 20.00 | null | Beverages |
+    Then Verify that status code is 403
+    Then verify response error message
+      | status           | errorMessage                                         |
+      | Bad Request Body | Invalid request - Food name cannot be null or empty. |
 
+   @addingWithOutFoodType
   Scenario: user adds food without food type
     Given add new food to FoodDelivery without food type
       | description | imageUrl        | name   | price |
       | Wine        | https:foods.com | Merlot | 20.00 |
-    Then verify that status code is 403
-    Then verify response error message "Invalid request - Food type cannot be null or empty."
+    Then Verify that status code is 403
+     Then verify response error message
+      | status           | errorMessage                                         |
+      | Bad Request Body | Invalid request - Food type cannot be null or empty. |
 
+ @addingFoodWithInvalidType
   Scenario: user adds food with invalid food type
     Given add new food to FoodDelivery with invalid food type
       | description | imageUrl        | name   | price | foodType |
       | Wine        | https:foods.com | Merlot | 20.00 | Soups    |
-    Then verify that status code is 400
-    Then verify response error message "Bad Request"
+    Then Verify that status code is 400
+    Then verify response error message "Bad Request" in "error"
 
   Scenario: User should be able to list all added foods.
     Given user list all food in cache
